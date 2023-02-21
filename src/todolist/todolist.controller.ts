@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TodolistService } from './todolist.service';
 import { CreateTodolistDto } from './dto/create-todolist.dto';
 import { UpdateTodolistDto } from './dto/update-todolist.dto';
+import { ApiGetAllTodolists } from './swagger/decorators/find-all-todolists.decorator';
 
 @Controller('todolist')
 export class TodolistController {
@@ -13,6 +14,7 @@ export class TodolistController {
   }
 
   @Get()
+  @ApiGetAllTodolists()
   findAll() {
     return this.todolistService.findAll();
   }
