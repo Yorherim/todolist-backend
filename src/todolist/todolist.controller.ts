@@ -18,17 +18,17 @@ export class TodolistController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOneById(@Param('id') id: string) {
     return this.todolistService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodolistDto: UpdateTodolistDto) {
+  updateOneById(@Param('id') id: string, @Body() updateTodolistDto: UpdateTodolistDto) {
     return this.todolistService.update(+id, updateTodolistDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  removeOneById(@Param('id') id: string) {
     return this.todolistService.remove(+id);
   }
 }
