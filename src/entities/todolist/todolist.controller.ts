@@ -1,14 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+
 import { TodolistService } from './todolist.service';
-import { CreateTodolistDto } from './dto/create-todolist.dto';
-import { UpdateTodolistDto } from './dto/update-todolist.dto';
-import { ApiGetAllTodolists } from './swagger/decorators/find-all-todolists.decorator';
+import { CreateTodolistDto, UpdateTodolistDto } from './dto';
+import { ApiGetAllTodolists, ApiCreateTodolist } from './swagger/decorators';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('todolist')
+@ApiTags('todolist')
 export class TodolistController {
   constructor(private readonly todolistService: TodolistService) {}
 
   @Post()
+  @ApiCreateTodolist()
   create(@Body() createTodolistDto: CreateTodolistDto) {
     return this.todolistService.create(createTodolistDto);
   }

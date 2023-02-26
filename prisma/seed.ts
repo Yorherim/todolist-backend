@@ -4,7 +4,34 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // create two todolists
+  const tasks = {
+    ['todolist1']: [
+      {
+        title: 'HTML',
+        isCompleted: false,
+      },
+      {
+        title: 'CSS',
+        isCompleted: false,
+      },
+      {
+        title: 'React',
+        isCompleted: false,
+      },
+    ],
+    ['todolist2']: [
+      {
+        title: 'Milk',
+        isCompleted: false,
+      },
+      {
+        title: 'apples',
+        isCompleted: false,
+      },
+    ],
+  };
+
+  // create two todolists with tasks
   const todolist1 = await prisma.todolist.upsert({
     where: { id: 1 },
     update: {},
@@ -12,20 +39,7 @@ async function main() {
       title: 'Learn technologies',
       tasks: {
         createMany: {
-          data: [
-            {
-              title: 'HTML',
-              isCompleted: false,
-            },
-            {
-              title: 'CSS',
-              isCompleted: false,
-            },
-            {
-              title: 'React',
-              isCompleted: false,
-            },
-          ],
+          data: [...tasks.todolist1],
         },
       },
     },
@@ -38,22 +52,11 @@ async function main() {
       title: 'Buy products',
       tasks: {
         createMany: {
-          data: [
-            {
-              title: 'Milk',
-              isCompleted: false,
-            },
-            {
-              title: 'apples',
-              isCompleted: false,
-            },
-          ],
+          data: [...tasks.todolist2],
         },
       },
     },
   });
-
-  console.log({ todolist1, todolist2 });
 }
 
 // execute the main function

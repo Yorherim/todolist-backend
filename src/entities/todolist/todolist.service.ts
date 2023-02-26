@@ -1,17 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTodolistDto } from './dto/create-todolist.dto';
-import { UpdateTodolistDto } from './dto/update-todolist.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateTodolistDto, UpdateTodolistDto } from './dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+
+const selectedFields: Prisma.TodolistSelect = {
+  id: true,
+  title: true,
+};
 
 @Injectable()
 export class TodolistService {
   constructor(private readonly prisma: PrismaService) {}
   create(createTodolistDto: CreateTodolistDto) {
-    return 'This action adds a new todolist';
+    return this.prisma.todolist.create({
+      data: createTodolistDto,
+      select: selectedFields,
+    });
   }
 
   findAll() {
-    return this.prisma.todolist.findMany();
+    return this.prisma.todolist.findMany({
+      select: selectedFields,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   findOne(id: number) {
