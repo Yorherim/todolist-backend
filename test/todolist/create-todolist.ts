@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
 import { AppModule } from '../../src/app.module';
+import { TodolistResponse } from './types';
 
 export const createTodolist = () => {
   let app: INestApplication;
@@ -22,12 +23,12 @@ export const createTodolist = () => {
     it('create todolist - SUCCESS', async () => {
       return request(app.getHttpServer())
         .post(`/todolist`)
-        .send({
-          title: 'Hellou',
-        })
+        .send({ title: 'Hellou' })
         .expect(201)
-        .then(({ body }: request.Response) => {
-          expect('id' in body).toBeDefined();
+        .then((res: request.Response) => {
+          const body: TodolistResponse = res.body;
+
+          expect(body.id).toBeDefined();
           expect(body.title).toBe('Hellou');
         });
     });
@@ -47,9 +48,7 @@ export const createTodolist = () => {
     it("Bad request (400) - Todolist title can't be spaces", async () => {
       return request(app.getHttpServer())
         .post(`/todolist`)
-        .send({
-          title: '',
-        })
+        .send({ title: '' })
         .expect(400)
         .then(({ body }: request.Response) => {
           expect(body.message[0]).toBe("Todolist title can't be empty");
@@ -59,9 +58,7 @@ export const createTodolist = () => {
     it("Bad request (400) - Todolist title can't be empty", async () => {
       return request(app.getHttpServer())
         .post(`/todolist`)
-        .send({
-          title: '     ',
-        })
+        .send({ title: '     ' })
         .expect(400)
         .then(({ body }: request.Response) => {
           expect(body.message[0]).toBe("Todolist title can't be empty");
@@ -71,9 +68,7 @@ export const createTodolist = () => {
     it('Bad request (400) - Todolist title should be string', async () => {
       return request(app.getHttpServer())
         .post(`/todolist`)
-        .send({
-          title: 5,
-        })
+        .send({ title: 5 })
         .expect(400)
         .then(({ body }: request.Response) => {
           expect(body.message[0]).toBe('Todolist title should be string');

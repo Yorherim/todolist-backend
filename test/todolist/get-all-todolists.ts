@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
 import { AppModule } from '../../src/app.module';
+import { TodolistResponse, TodolistWithAllFieldsResponse } from './types';
 
 export const getAllTodolists = () => {
   let app: INestApplication;
@@ -22,7 +23,9 @@ export const getAllTodolists = () => {
     return request(app.getHttpServer())
       .get(`/todolist`)
       .expect(200)
-      .then(({ body }: request.Response) => {
+      .then((res: request.Response) => {
+        const body: TodolistResponse[] = res.body;
+
         expect(Array.isArray(body)).toBeTruthy();
         expect(body).toHaveLength(2);
         expect(body[0].title).toBe('Buy products');
@@ -34,12 +37,17 @@ export const getAllTodolists = () => {
     return request(app.getHttpServer())
       .get(`/todolist`)
       .expect(200)
-      .then(({ body }: request.Response) => {
-        expect('id' in body[0]).toBeTruthy();
-        expect('title' in body[0]).toBeTruthy();
-        expect('tasks' in body[0]).toBeFalsy();
-        expect('createdAt' in body[0]).toBeFalsy();
-        expect('updatedAt' in body[0]).toBeFalsy();
+      .then((res: request.Response) => {
+        // correct body type - TodolistResponse[]
+        // need TodolistWithAllFieldsResponse type for correct type todolist
+        // because need to check in response.body -> tasks, createdAt, updatedAt
+        const body: TodolistWithAllFieldsResponse[] = res.body;
+
+        expect(body[0].id).toBeDefined();
+        expect(body[0].title).toBeDefined();
+        expect(body[0].tasks).not.toBeDefined();
+        expect(body[0].createdAt).not.toBeDefined();
+        expect(body[0].updatedAt).not.toBeDefined();
       });
   });
 };

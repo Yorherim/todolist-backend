@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 
 import { TodolistService } from './todolist.service';
-import { CreateTodolistDto, UpdateTodolistDto } from './dto';
+import { CreateTodolistDto } from './dto';
 import { ApiGetAllTodolists, ApiCreateTodolist } from './swagger/decorators';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -28,12 +28,12 @@ export class TodolistController {
   }
 
   @Patch(':id')
-  updateOneById(@Param('id') id: string, @Body() updateTodolistDto: UpdateTodolistDto) {
+  updateOneById(@Param('id') id: string, @Body() updateTodolistDto: CreateTodolistDto) {
     return this.todolistService.update(+id, updateTodolistDto);
   }
 
   @Delete(':id')
   removeOneById(@Param('id') id: string) {
-    return this.todolistService.remove(+id);
+    return this.todolistService.removeOneById(+id);
   }
 }

@@ -22,7 +22,7 @@ export class TaskService {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  removeAllTasksByTodolistId(todolistId: number) {
+    return this.prisma.task.deleteMany({ where: { todolistId } });
   }
 }

@@ -27,8 +27,8 @@ export class TaskController {
     return this.taskService.update(+id, updateTaskDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskService.remove(+id);
+  @Delete(':todolistId')
+  removeAllTasksByTodolistId(@Param('todolistId') todolistId: string) {
+    return this.taskService.removeAllTasksByTodolistId(+todolistId);
   }
 }
