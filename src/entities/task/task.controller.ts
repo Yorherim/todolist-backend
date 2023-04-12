@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { FindAllQueryParams } from './interfaces/find-all-query.interface';
+import { ApiCreateTask, ApiGetTasks } from './swagger/decorators';
 
+@ApiTags('task')
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
+  @ApiCreateTask()
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.create(createTaskDto);
   }
 
   @Get()
-  findAll() {
-    return this.taskService.findAll();
+  @ApiGetTasks()
+  findAll(@Query() query: FindAllQueryParams) {
+    return this.taskService.findAll(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  @Get(':taskId')
+  findOne(@Param('taskId') taskId: string) {
+    return this.taskService.findOne(+taskId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+  @Patch(':taskId')
+  update(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.taskService.update(+taskId, updateTaskDto);
   }
 
   @Delete(':todolistId')
   removeAllTasksByTodolistId(@Param('todolistId') todolistId: string) {
-    return this.taskService.removeAllTasksByTodolistId(+todolistId);
+    return this.taskService.removeAllByTodolistId(+todolistId);
   }
 }

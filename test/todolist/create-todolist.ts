@@ -45,7 +45,7 @@ export const createTodolist = () => {
   });
 
   describe('create todolist validate dto', () => {
-    it("Bad request (400) - Todolist title can't be spaces", async () => {
+    it("Bad request (400) - Todolist title can't be empty", async () => {
       return request(app.getHttpServer())
         .post(`/todolist`)
         .send({ title: '' })

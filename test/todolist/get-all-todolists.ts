@@ -14,7 +14,6 @@ export const getAllTodolists = () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    //app.useGlobalPipes(new ValidationPipe());
 
     await app.init();
   });
