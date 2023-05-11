@@ -12,11 +12,21 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   login     String
   password  String
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Project {
+  id        Int        @id @default(autoincrement())
+  title     String
   todolists Todolist[]
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -25,8 +35,8 @@ model Todolist {
   id        Int      @id @default(autoincrement())
   title     String
   tasks     Task[]
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

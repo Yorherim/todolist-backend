@@ -17,8 +17,8 @@ export class TodolistService {
     return this.prisma.todolist.create({
       data: {
         title: createTodolistDto.title,
-        user: {
-          connect: { id: +createTodolistDto.userId },
+        project: {
+          connect: { id: +createTodolistDto.projectId },
         },
       },
       select: selectedTodolistFields,
@@ -45,7 +45,7 @@ export class TodolistService {
     return todolist;
   }
 
-  async update(id: number, updateTodolistDto: Omit<UpdateTodolistDto, 'userId'>) {
+  async update(id: number, updateTodolistDto: Omit<UpdateTodolistDto, 'projectId'>) {
     await this.findOne(id);
     return this.prisma.todolist.update({
       where: { id },

@@ -15,7 +15,7 @@ async function main() {
     },
   });
 
-  const todolist1 = await prisma.todolist.upsert({
+  const project1 = await prisma.project.upsert({
     where: { id: 1 },
     update: {},
     create: {
@@ -23,12 +23,37 @@ async function main() {
       userId: 1,
     },
   });
-  const todolist2 = await prisma.todolist.upsert({
+  const project2 = await prisma.project.upsert({
     where: { id: 2 },
     update: {},
     create: {
       title: 'Buy products',
       userId: 1,
+    },
+  });
+
+  const todolist1 = await prisma.todolist.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      title: 'Learn technologies',
+      projectId: 1,
+    },
+  });
+  const todolist2 = await prisma.todolist.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      title: 'Buy products',
+      projectId: 1,
+    },
+  });
+  const todolist3 = await prisma.todolist.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+      title: 'Buy products',
+      projectId: 2,
     },
   });
 
@@ -74,7 +99,7 @@ async function main() {
     create: {
       title: 'React',
       isCompleted: false,
-      todolistId: 2,
+      todolistId: 3,
     },
   });
 }

@@ -13,5 +13,5 @@ export class CreateTodolistDto {
   title: string;
 
   @CheckString('userId')
-  userId: string;
+  projectId: string;
 }

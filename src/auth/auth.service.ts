@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -19,7 +24,10 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    return await this.userService.create({ password: passwordHash, login, email });
+    const newUser = await this.userService.create({ password: passwordHash, login, email });
+    return {
+      token: this.generateAccessToken(newUser.login, newUser.id),
+    };
   }
 
   async signIn(body: SignInDto) {
@@ -36,6 +44,18 @@ export class AuthService {
     return {
       token: this.generateAccessToken(user.login, user.id),
     };
+  }
+
+  async authMe(authorization: string) {
+    const token = authorization.split(' ')[1];
+
+    try {
+      return this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET_KEY,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
   }
 
   generateAccessToken(login: string, userId: number) {
